@@ -5,6 +5,7 @@ import Header from "../components/cart/header";
 import Product from "../components/cart/product";
 import styles from "../styles/cart.module.scss";
 import { updateCart } from "../store/cartSlice";
+import db from "../utils/db";
 import CartHeader from "../components/cart/cartHeader";
 import Checkout from "../components/cart/checkout";
 import PaymentMethods from "../components/cart/paymentMethods";
