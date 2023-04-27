@@ -3,7 +3,7 @@ import Rating from "@mui/material/Rating";
 import { useState } from "react";
 import { useRouter } from "next/router";
 import { HeartIcon, PlusIcon } from '@heroicons/react/24/outline'
-import Link from "next/Link";
+import Link from "next/link";
 import { TbPlus, TbMinus } from "react-icons/tb";
 import { useEffect } from "react";
 import { BsHandbagFill, BsHeart } from "react-icons/bs";
