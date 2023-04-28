@@ -25,8 +25,9 @@ export default function Home({ country, products,categories }) {
   const [loading, setLoading] = useState(false)
  const handleChange=(e)=>{
   const {value}=e.target
+  if(value){
   axios
-  .get("/api/product",{ params: { category: 42, } })
+  .get("/api/product",{ params: { category: value, } })
   .then((res) => {
     setLoading(false);
     setFilterProducts(res.data.data.products)
@@ -39,6 +40,9 @@ export default function Home({ country, products,categories }) {
       toast.error(err.message);
     }
   });
+
+  }
+
 
  }
 

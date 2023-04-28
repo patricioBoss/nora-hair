@@ -18,6 +18,7 @@ import { hideDialog, showDialog } from "../../../store/DialogSlice";
 import { signIn, useSession } from "next-auth/react";
 import { Disclosure, RadioGroup } from "@headlessui/react";
 import { capitalCase} from "change-case";
+import { fCurrency } from "../../../utils/formatNumber";
 
 
 function classNames(...classes) {
@@ -135,8 +136,8 @@ export default function Infos({ product, setActiveImg }) {
 
             <div className="mt-3">
               <h2 className="sr-only">Product information</h2>
-              <p className="text-3xl tracking-tight text-gray-900">₦{product.price}</p>
-              <p className="text-sm my-3">  <span className="line-through">₦{product.priceBefore}</span> <span className=" p-1 bg-gray-300 font-medium rounded text-gray-900">-{product.discount}%</span></p>
+              <p className="text-3xl tracking-tight text-gray-900">{fCurrency(product.price)}</p>
+              <p className="text-sm my-3">  <span className="line-through">{fCurrency(product.priceBefore)}</span> <span className=" p-1 bg-gray-300 font-medium rounded text-gray-900">-{product.discount}%</span></p>
             </div>
         
         <p className=" text-xs">

@@ -2,6 +2,10 @@
   position: relative;
   width: 290px;
   height: 500px;
+  @media (max-width: 800px) {
+    width: 250px;
+    height: 430px;
+  }
   &__infos {
     width: 100%;
     margin-top: 1px;

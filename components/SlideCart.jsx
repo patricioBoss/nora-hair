@@ -4,6 +4,7 @@ import { XMarkIcon } from '@heroicons/react/24/outline'
 import { useDispatch, useSelector } from 'react-redux'
 import { toggleSlider } from '../store/cartSlice'
 import Link from 'next/link'
+import { fCurrency } from '../utils/formatNumber'
 
 const products = [
   {
@@ -104,9 +105,10 @@ const removeProduct = (id) => {
                                       <h3>
                                         {product.name}
                                       </h3>
-                                      <p className="ml-4">{product.price}</p>
+                                      <p className="ml-4">{fCurrency(product.price)}</p>
                                     </div>
-                                   { product.color.color && <p className="mt-1 text-sm text-gray-500">{product.color.color}</p>}
+                                   { product.color.color && <p className="mt-1 text-sm text-gray-500"> <span className=' font-semibold'> Colors &nbsp; :&nbsp;</span><span className='h-4 w-4 rounded-full' style={{background:product.color.color}}> </span></p>}
+                                   { product?.size && <p className="mt-1 text-sm text-gray-500"><span className=' font-semibold'> Size:&nbsp;</span>{product.size}</p>}
                                   </div>
                                   <div className="flex flex-1 items-end justify-between text-sm">
                                     <p className="text-gray-500">Qty {product.qty}</p>
@@ -130,12 +132,12 @@ const removeProduct = (id) => {
                     </div>
 
                     <div className="border-t border-gray-200 px-4 py-6 sm:px-6">
-                      <div className="flex justify-between text-base font-medium text-gray-900">
+{        !!cartItems.length &&              <div className="flex justify-between text-base font-medium text-gray-900">
                         <p>Subtotal</p>
                         <p>{  !!cartItems.length &&  (
-        cartItems.reduce((a, c) => a + c.price * c.qty, 0)
-      ).toFixed(2)}</p>
-                      </div>
+        fCurrency(cartItems.reduce((a, c) => a + c.price * c.qty, 0)
+      .toFixed(2)))}</p>
+                      </div>}
                       <p className="mt-0.5 text-sm text-gray-500">Shipping and taxes calculated at checkout.</p>
                       <div className="mt-6">
                         <Link href="/cart" >
