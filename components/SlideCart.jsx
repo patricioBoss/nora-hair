@@ -107,7 +107,7 @@ const removeProduct = (id) => {
                                       </h3>
                                       <p className="ml-4">{fCurrency(product.price)}</p>
                                     </div>
-                                   { product.color.color && <p className="mt-1 text-sm text-gray-500"> <span className=' font-semibold'> Colors &nbsp; :&nbsp;</span><span className='h-4 w-4 rounded-full' style={{background:product.color.color}}> </span></p>}
+                                   { product.color.color && <p className="mt-1 text-sm text-gray-500"> <span className=' font-semibold'> Colors &nbsp; :&nbsp;</span><span className='px-3 text-xs rounded-full' style={{background:product.color.color}}> </span></p>}
                                    { product?.size && <p className="mt-1 text-sm text-gray-500"><span className=' font-semibold'> Size:&nbsp;</span>{product.size}</p>}
                                   </div>
                                   <div className="flex flex-1 items-end justify-between text-sm">
