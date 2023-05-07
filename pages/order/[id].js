@@ -14,6 +14,8 @@ import { Container } from "../../components/Container";
 import { toast } from "react-toastify";
 import { fCurrency, fData } from "../../utils/formatNumber";
 import { fDateTime } from "../../utils/formatTime";
+import { useDispatch } from "react-redux";
+import { emptyCart } from "../../store/cartSlice";
 
 function reducer(state, action) {
   switch (action.type) {
@@ -32,8 +34,9 @@ export default function OrderPage({
   paypal_client_id,
   stripe_public_key,
 }) {
+  const reduxDispatch = useDispatch();
   const publicKey = process.env.NEXT_PUBLIC_PAYSTACK_PUBLIC_KEY;
-  console.log(orderData)
+  console.log(orderData);
   const [{ isPending }, paypalDispatch] = usePayPalScriptReducer();
   const [dispatch] = useReducer(reducer, {
     loading: true,
@@ -59,8 +62,6 @@ export default function OrderPage({
       });
     }
   }, [orderData]);
-
-
 
   function createOrderHanlder(data, actions) {
     return actions.order
@@ -91,35 +92,25 @@ export default function OrderPage({
       }
     });
   }
- async function onApprovePaystack(data, actions) {
-   
-      try {
-        dispatch({ type: "PAY_REQUEST" });
-        const { data } = await axios.put(
-          `/api/order/${orderData._id}/pay`,
-          {
-
-          }
-        );
-
-      } catch (error) {
-      }
-   
-  }
+  // async function onApprovePaystack(data, actions) {
+  //   try {
+  //     dispatch({ type: "PAY_REQUEST" });
+  //     const { data } = await axios.put(`/api/order/${orderData._id}/pay`, {});
+  //   } catch (error) {}
+  // }
 
   const payButtonProps = {
     email: orderData.user.email,
     firstname: orderData.shippingAddress.firstName,
     lastname: orderData.shippingAddress.lastName,
-    amount: Number(orderData.total)* 100,
+    amount: Number(orderData.total) * 100,
     metadata: {
       name: orderData.user.name,
-      value:orderData._id
+      value: orderData._id,
     },
     publicKey,
     text: "Pay Now",
   };
-
 
   function onErroHandler(error) {
     console.log(error);
@@ -131,9 +122,9 @@ export default function OrderPage({
         <Container className={styles.container}>
           <div className={styles.order__infos}>
             <div className={styles.order__header}>
-              <div className={styles.order__header_head}>
+              <div className={styles.order__header_head + " !flex !flex-wrap"}>
                 Home <IoIosArrowForward /> Orders <IoIosArrowForward /> ID{" "}
-                {orderData._id}
+                <span className=" font-semibold">{orderData._id}</span>
               </div>
               <div className={styles.order__header_status}>
                 Payment Status :{" "}
@@ -143,7 +134,11 @@ export default function OrderPage({
                   <img src="../../../images/unverified.png" alt="paid" />
                 )}
               </div>
-              <span className=" !flex"> <span className=" font-semibold">Created At :</span>{fDateTime(orderData.createdAt) }</span>
+              <span className=" !flex">
+                {" "}
+                <span className=" font-semibold">Created At :</span>
+                {fDateTime(orderData.createdAt)}
+              </span>
               <div className={styles.order__header_status}>
                 Order Status :
                 <span
@@ -181,10 +176,10 @@ export default function OrderPage({
                       <img src={product.color.image} alt="" /> / {product.size}
                     </div>
                     <div className={styles.product__infos_priceQty}>
-                      ₦{fCurrency(product.price)} x {product.qty}
+                      {fCurrency(product.price)} x {product.qty}
                     </div>
                     <div className={styles.product__infos_total}>
-                     {fCurrency(product.price * product.qty)}
+                      {fCurrency(product.price * product.qty)}
                     </div>
                   </div>
                 </div>
@@ -202,10 +197,11 @@ export default function OrderPage({
                       </span>
                       <span>
                         -
-                        {fCurrency((
-                          orderData.totalBeforeDiscount - orderData.total
-                        ).toFixed(2))}
-                       
+                        {fCurrency(
+                          (
+                            orderData.totalBeforeDiscount - orderData.total
+                          ).toFixed(2)
+                        )}
                       </span>
                     </div>
                     <div className={styles.order__products_total_sub}>
@@ -222,14 +218,14 @@ export default function OrderPage({
                 ) : (
                   <>
                     <div className={styles.order__products_total_sub}>
-                      <span>Tax price</span>
-                      <span>+{fCurrency(orderData.taxPrice)}</span>
+                      <span>Shipping Fee</span>
+                      <span>+{fCurrency(orderData.shippingPrice)}</span>
                     </div>
                     <div
                       className={`${styles.order__products_total_sub} ${styles.bordertop}`}
                     >
                       <span>TOTAL TO PAY</span>
-                      <b>{fCurrency(orderData.total) }</b>
+                      <b>{fCurrency(orderData.total)}</b>
                     </div>
                   </>
                 )}
@@ -256,14 +252,16 @@ export default function OrderPage({
                 </span>
                 <span>{orderData.shippingAddress.address1}</span>
                 <span>{orderData.shippingAddress.address2}</span>
-                <span>
-                  {orderData.shippingAddress.state},
-                  {orderData.shippingAddress.city}
-                </span>
+                {!orderData?.shippingLocation ? (
+                  <span>
+                    {orderData.shippingAddress.state},
+                    {orderData.shippingAddress.city}
+                  </span>
+                ) : (
+                  <span>{orderData?.shippingLocation}</span>
+                )}
                 <span>{orderData.shippingAddress.zipCode}</span>
                 <span>{orderData.shippingAddress.country}</span>
-              
-              
               </div>
               <div className={styles.order__address_shipping}>
                 <h2>Billing Address</h2>
@@ -296,24 +294,24 @@ export default function OrderPage({
                     )}
                   </div>
                 )} */}
-                {orderData.paymentMethod == "credit_card" && (                   
-                   <PaystackButton
-                      className="bg-black w-full py-4 text-white mt-4"
-                      {...payButtonProps}
-                      // metadata={{}}
-                      onSuccess={async (txn) => {
-                        // console.log("this is okay", txn.reference);  
-                        toast.success("payment successful");
-
-                      }}
-                      onClose={() => {}}
-                    />
+                {
+                  <PaystackButton
+                    className="bg-black w-full py-4 text-white mt-4"
+                    {...payButtonProps}
+                    // metadata={{}}
+                    onSuccess={async (txn) => {
+                      // console.log("this is okay", txn.reference);
+                      toast.success("payment successful");
+                      reduxDispatch(emptyCart());
+                    }}
+                    onClose={() => {}}
+                  />
                   // <StripePayment
                   //   total={orderData.total}
                   //   order_id={orderData._id}
                   //   stripe_public_key={stripe_public_key}
                   // />
-                )}
+                }
                 {orderData.paymentMethod == "cash" && (
                   <div className={styles.cash}>cash</div>
                 )}

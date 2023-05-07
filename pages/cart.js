@@ -2,7 +2,8 @@ import { useDispatch, useSelector } from "react-redux";
 import { useEffect, useState } from "react";
 import Empty from "../components/cart/empty";
 import Header from "../components/cart/header";
-import Product from "../components/cart/product";
+import ProductCart from "../components/cart/product";
+import Product from "../models/Product"
 import styles from "../styles/cart.module.scss";
 import { updateCart } from "../store/cartSlice";
 import db from "../utils/db";
@@ -60,7 +61,7 @@ export default function Cart({related}) {
             />
             <div className={styles.cart__products}>
               {cart.cartItems.map((product) => (
-                <Product
+                <ProductCart
                   product={product}
                   key={product._uid}
                   selected={selected}
@@ -92,7 +93,7 @@ export async function getServerSideProps() {
   db.connectDb();
 
   
-  const related = await Product.find({ category: product.category._id }).lean();
+  const related = await Product.find({}).lean();
   //------------
 
   db.disconnectDb();

@@ -2,7 +2,7 @@ import { Fragment, useState } from 'react'
 import { Dialog, Transition } from '@headlessui/react'
 import { XMarkIcon } from '@heroicons/react/24/outline'
 import { useDispatch, useSelector } from 'react-redux'
-import { toggleSlider } from '../store/cartSlice'
+import { toggleSlider, updateCart } from '../store/cartSlice'
 import Link from 'next/link'
 import { fCurrency } from '../utils/formatNumber'
 
@@ -107,7 +107,7 @@ const removeProduct = (id) => {
                                       </h3>
                                       <p className="ml-4">{fCurrency(product.price)}</p>
                                     </div>
-                                   { product.color.color && <p className="mt-1 text-sm text-gray-500"> <span className=' font-semibold'> Colors &nbsp; :&nbsp;</span><span className='px-3 text-xs rounded-full' style={{background:product.color.color}}> </span></p>}
+                                   { product.color.color && <p className="mt-1 text-sm text-gray-500"> <span className=' font-semibold'> Colors &nbsp; :&nbsp;</span><span className='px-2 text-xs border-gray-300 border-2 rounded-full' style={{background:product.color.color}}> </span></p>}
                                    { product?.size && <p className="mt-1 text-sm text-gray-500"><span className=' font-semibold'> Size:&nbsp;</span>{product.size}</p>}
                                   </div>
                                   <div className="flex flex-1 items-end justify-between text-sm">
@@ -147,7 +147,7 @@ const removeProduct = (id) => {
                       </div>
                       <div className="mt-6 flex justify-center text-center text-sm text-gray-500">
                         <p>
-                          or
+                          or&nbsp;
                           <button
                             type="button"
                             className="font-medium text-indigo-600 hover:text-indigo-500"

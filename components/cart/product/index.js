@@ -56,9 +56,10 @@ export default function Product({ product, selected, setSelected }) {
         <div className={styles.col}>
           <div className={styles.grid}>
             <h1>
-              {product.name.length > 30
-                ? `${product.name.substring(0, 30)}`
-                : product.name}
+              {/* {product.name.length > 30
+                ? `${product.name.substring(0, 30)}....`
+                : product.name} */}
+              {product.name}
             </h1>
             <div style={{ zIndex: "2" }}>
               <BsHeart />
@@ -73,7 +74,9 @@ export default function Product({ product, selected, setSelected }) {
           <div className={styles.product__style}>
             <img src={product.color.image} alt="" />
             {product.size && <span>{product.size}</span>}
-            {product.price && <span>{fCurrency(product.price.toFixed(2))}$</span>}
+            {product.price && (
+              <span>{fCurrency(product.price.toFixed(2))}</span>
+            )}
             <MdOutlineKeyboardArrowRight />
           </div>
           <div className={styles.product__priceQty}>
@@ -106,11 +109,11 @@ export default function Product({ product, selected, setSelected }) {
               </button>
             </div>
           </div>
-          <div className={styles.product__shipping}>
+          {/* <div className={styles.product__shipping}>
             {product.shipping
               ? `+${fCurrency(product.shipping)}$ Shipping fee`
               : "Free Shipping"}
-          </div>
+          </div> */}
           {product.quantity < 1 && (
             <div className={styles.notAvailable}>
               This product is out of stock, Add it to your whishlist it may get

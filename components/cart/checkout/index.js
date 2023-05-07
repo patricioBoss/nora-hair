@@ -1,3 +1,4 @@
+import { fCurrency } from "../../../utils/formatNumber";
 import styles from "./styles.module.scss";
 
 export default function Checkout({
@@ -12,15 +13,15 @@ export default function Checkout({
       <h2>Order Summary</h2>
       <div className={styles.cart__checkout_line}>
         <span>Subtotal</span>
-        <span>US${subtotal}</span>
+        <span>{fCurrency(subtotal)}</span>
       </div>
       <div className={styles.cart__checkout_line}>
         <span>Shipping</span>
-        <span>+{shippingFee}$</span>
+        <span>+{fCurrency(shippingFee)}</span>
       </div>
       <div className={styles.cart__checkout_total}>
         <span>Total</span>
-        <span>US{total}$</span>
+        <span>{fCurrency(total)}</span>
       </div>
       <div className={styles.submit}>
         <button

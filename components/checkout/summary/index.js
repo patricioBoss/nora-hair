@@ -7,6 +7,7 @@ import { applyCoupon } from "../../../requests/user";
 import axios from "axios";
 import Router from "next/router";
 import { fCurrency } from "../../../utils/formatNumber";
+import { toast } from "react-toastify";
 export default function Summary({
   totalAfterDiscount,
   setTotalAfterDiscount,
@@ -14,6 +15,8 @@ export default function Summary({
   cart,
   paymentMethod,
   selectedAddress,
+  shippingLocation,
+  shippingPrice,
 }) {
   const [coupon, setCoupon] = useState("");
   const [discount, setDiscount] = useState("");
@@ -34,6 +37,9 @@ export default function Summary({
   };
   const placeOrderHandler = async () => {
     try {
+      if (!cart.products.every((x) => x.inStock)) {
+        toast.error("product Item is out of stock");
+      }
       if (paymentMethod == "") {
         setOrder_Error("Please choose a payment method.");
         return;
@@ -41,12 +47,30 @@ export default function Summary({
         setOrder_Error("Please choose a shipping address.");
         return;
       }
+      console.log({
+        products: cart.products,
+        shippingAddress: selectedAddress,
+        paymentMethod,
+        ...(shippingPrice ? { shippingPrice } : {}),
+        ...(shippingLocation ? { shippingLocation } : {}),
+        total:
+          totalAfterDiscount !== ""
+            ? totalAfterDiscount + (shippingPrice ?? 0)
+            : cart.cartTotal + (shippingPrice ?? 0),
+        totalBeforeDiscount: cart.cartTotal + (shippingPrice ?? 0),
+        couponApplied: coupon,
+      });
       const { data } = await axios.post("/api/order/create", {
         products: cart.products,
         shippingAddress: selectedAddress,
         paymentMethod,
-        total: totalAfterDiscount !== "" ? totalAfterDiscount : cart.cartTotal,
-        totalBeforeDiscount: cart.cartTotal,
+        ...(shippingPrice ? { shippingPrice } : {}),
+        ...(shippingLocation ? { shippingLocation } : {}),
+        total:
+          totalAfterDiscount !== ""
+            ? totalAfterDiscount + (shippingPrice ?? 0)
+            : cart.cartTotal + (shippingPrice ?? 0),
+        totalBeforeDiscount: cart.cartTotal + (shippingPrice ?? 0),
         couponApplied: coupon,
       });
       Router.push(`/order/${data.order_id}`);
@@ -81,7 +105,8 @@ export default function Summary({
               </button>
               <div className={styles.infos}>
                 <span>
-                  Total : <b>{fCurrency(cart.cartTotal)}</b>{" "}
+                  Total :{" "}
+                  <b>{fCurrency(cart.cartTotal + (shippingPrice ?? 0))}</b>{" "}
                 </span>
                 {discount > 0 && (
                   <span className={styles.coupon_span}>
@@ -91,7 +116,10 @@ export default function Summary({
                 {totalAfterDiscount < cart.cartTotal &&
                   totalAfterDiscount != "" && (
                     <span>
-                      New price : <b>{totalAfterDiscount}$</b>
+                      New price :{" "}
+                      <b>
+                        {fCurrency(totalAfterDiscount + (shippingPrice ?? 0))}
+                      </b>
                     </span>
                   )}
               </div>
@@ -103,6 +131,9 @@ export default function Summary({
         Place Order
       </button>
       {order_error && <span className={styles.error}>{order_error}</span>}
+      {!cart.products.every((x) => x.inStock) && (
+        <span className={styles.error}>{"product is out of stock"}</span>
+      )}
     </div>
   );
 }

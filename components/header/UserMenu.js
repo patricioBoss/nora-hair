@@ -16,8 +16,8 @@ export default function UserMenu({ session }) {
         </div>
       ) : (
         <div className={styles.flex}>
-          <button className={styles.btn_primary}>Register</button>
-          <button className={styles.btn_outlined} onClick={() => signIn()}>
+          <button className={styles.btn_primary} onClick={() => signIn()}>Register</button>
+          <button className={styles.btn_outlined + " !border-black !border"} onClick={() => signIn()}>
             Login
           </button>
         </div>

@@ -36,7 +36,7 @@ const orderSchema = new mongoose.Schema(
         },
       },
     ],
-    payImage:{
+    payImage: {
       type: String,
     },
     shippingAddress: {
@@ -90,6 +90,9 @@ const orderSchema = new mongoose.Schema(
       type: Number,
       required: true,
       default: 0,
+    },
+    shippingLocation: {
+      type: String,
     },
     taxPrice: {
       type: Number,

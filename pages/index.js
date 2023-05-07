@@ -17,63 +17,128 @@ import Category from "../models/Category";
 import { toast } from "react-toastify";
 import { useState } from "react";
 import axios from "axios";
-export default function Home({ country, products,categories }) {
- const [filterProducts, setFilterProducts] = useState(products)
+import Spin from "../components/spin";
+import { useEffect } from "react";
+import { useRef } from "react";
+export default function Home({
+  country,
+  products,
+  categories,
+  paginationCount,
+}) {
+  console.log({
+    country,
+    products,
+    categories,
+    paginationCount,
+  });
+  const [page, setpage] = useState(1);
+  const [pagination, setpagination] = useState(paginationCount);
+  const firstMounted = useRef(true);
+  const [category, setCategory] = useState();
+  const [filterProducts, setFilterProducts] = useState(products);
   const { data: session } = useSession();
   const isMedium = useMediaQuery({ query: "(max-width:850px)" });
   const isMobile = useMediaQuery({ query: "(max-width:550px)" });
-  const [loading, setLoading] = useState(false)
- const handleChange=(e)=>{
-  const {value}=e.target
-  if(value){
-  axios
-  .get("/api/product",{ params: { category: value, } })
-  .then((res) => {
-    setLoading(false);
-    setFilterProducts(res.data.data.products)
-  })
-  .catch((err) => {
-    setLoading(false);
-    if (err.response) {
-      toast.error(err.response.data.message);
-    } else {
-      toast.error(err.message);
+  const [loading, setLoading] = useState(false);
+
+  useEffect(() => {
+    if (!firstMounted.current && page > 1) {
+      console.log("this is called");
+      axios
+        .get("/api/product", { params: { category: category ?? "", page } })
+        .then((res) => {
+          setLoading(false);
+          setpagination(res.data.data.paginationCount);
+
+          setFilterProducts((x) => [...x, ...res.data.data.products]);
+        })
+        .catch((err) => {
+          setLoading(false);
+          if (err.response) {
+            toast.error(err.response.data.message);
+          } else {
+            toast.error(err.message);
+          }
+        });
     }
-  });
+    firstMounted.current = false;
 
-  }
+    return () => {};
+  }, [page]);
 
-
- }
+  const handleChange = (e) => {
+    const { value } = e.target;
+    setCategory(value);
+    if (value) {
+      axios
+        .get("/api/product", { params: { category: value, page } })
+        .then((res) => {
+          setLoading(false);
+          setFilterProducts(res.data.data.products);
+          setpagination(res.data.data.paginationCount);
+          setpage(1);
+        })
+        .catch((err) => {
+          setLoading(false);
+          if (err.response) {
+            toast.error(err.response.data.message);
+          } else {
+            toast.error(err.message);
+          }
+        });
+    }
+  };
 
   return (
     <>
-   <Header country={country} />
-     <Main />
+      <Header country={country} />
+      <Main />
       <div className={styles.home}>
-       <Container>
-          <LandingCategories/>
-            <Filter categories={categories} handleChange={handleChange} />
+        <Container>
+          <LandingCategories />
+          <Filter categories={categories} handleChange={handleChange} />
           <div className={styles.products}>
             {filterProducts.map((product) => (
               <ProductCard product={product} key={product._id} />
             ))}
           </div>
-       </Container>
-        </div>
+          <div className=" flex justify-center items-center py-10">
+            <button
+              type="button"
+              disabled={loading}
+              className={`inline-flex justify-center rounded-md border border-transparent bg-black px-8 py-4 text-base font-medium text-white shadow-sm hover:bg-gray-900 focus:outline-none focus:ring-2 focus:ring-black focus:ring-offset-2 sm:text-base ${
+                loading ? " opacity-70" : ""
+              }`}
+              onClick={() => (pagination > page ? setpage((x) => x++) : null)}
+            >
+              {loading && <Spin width={"w-5"} height={"h-5"} />}
+              LOAD MORE
+            </button>
+          </div>
+        </Container>
+      </div>
       <Footer />
     </>
   );
 }
 export async function getServerSideProps() {
+  const pageSize = 40;
   db.connectDb();
-  let products = await Product.find().sort({ createdAt: -1 }).lean();
+  let products = await Product.find()
+    .skip(0)
+    .limit(pageSize)
+    .sort({ createdAt: -1 })
+    .lean();
   const categories = await Category.find({}).sort({ updatedAt: -1 }).lean();
+  let totalProducts = await Product.countDocuments({});
   return {
     props: {
       products: JSON.parse(JSON.stringify(products)),
       //country: { name: data.name, flag: data.flag.emojitwo },
-      categories: serializeFields(categories) ,
+      categories: serializeFields(categories),
+      paginationCount: Math.ceil(totalProducts / pageSize),
+      total: totalProducts,
       country: {
         name: "Nigeria",
         flag: "https://flagcdn.com/w40/ng.png",

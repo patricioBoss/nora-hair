@@ -8,23 +8,10 @@ const handler = nc().use(auth);
 handler.post(async (req, res) => {
   try {
     db.connectDb();
-    const {
-      products,
-      shippingAddress,
-      paymentMethod,
-      total,
-      totalBeforeDiscount,
-      couponApplied,
-    } = req.body;
     const user = await User.findById(req.user);
     const newOrder = await new Order({
       user: user._id,
-      products,
-      shippingAddress,
-      paymentMethod,
-      total,
-      totalBeforeDiscount,
-      couponApplied,
+      ...req.body,
     }).save();
     db.disconnectDb();
     return res.json({

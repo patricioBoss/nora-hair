@@ -32,7 +32,7 @@ export default function MainSwiper() {
       >
         {[...Array(2).keys()].map((i) => (
           <SwiperSlide key={i} className=" !rounded-none">
-            <img src={`../../../images/hair-bg/hair-banner${i + 1}.jpg`} className="!rounded-none !h-[679px] !w-full" alt="" />
+            <img src={`../../../images/hair-bg/hair-banner${i + 1}.jpg`} className="!rounded-none !w-full" alt="" />
           </SwiperSlide>
         ))}
       </Swiper>
