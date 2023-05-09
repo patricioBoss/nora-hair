@@ -13,7 +13,12 @@ import { Autoplay } from "swiper";
 import { useEffect } from "react";
 import Link from "next/link";
 import { useMediaQuery } from "react-responsive";
-export default function ProductSwiper({ images, slug, active }) {
+export default function ProductSwiper({
+  images,
+  slug,
+  active,
+  addToCartHandler,
+}) {
   const [swiper, setSwiper] = useState();
   const [onEnter, setonEnter] = useState(false);
   const isMobile = useMediaQuery({ query: "(max-width:550px)" });
@@ -62,6 +67,7 @@ export default function ProductSwiper({ images, slug, active }) {
       >
         <button
           type="button"
+          onClick={addToCartHandler}
           className={`relative inline-flex items-center text-center justify-center rounded-md border border-transparent bg-black  px-4 py-3 w-[90%] text-base font-medium text-white shadow-sm hover:bg-gray-900 focus:outline-none focus:ring-2 focus:ring-gray-800 focus:ring-offset-2`}
         >
           Add to Cart

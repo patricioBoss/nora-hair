@@ -3,9 +3,18 @@ import { useEffect } from "react";
 import { useState } from "react";
 import ProductSwiper from "./ProductSwiper";
 import styles from "./styles.module.scss";
+import { useDispatch, useSelector } from "react-redux";
+import { useRouter } from "next/dist/client/router";
 import { fCurrency } from "../../utils/formatNumber";
+import axios from "axios";
+import { toast } from "react-toastify";
+import { addToCart, updateCart } from "../../store/cartSlice";
 
 export default function ProductCard({ product }) {
+  const qty = 1;
+  const dispatch = useDispatch();
+  const { cart } = useSelector((state) => ({ ...state }));
+  const router = useRouter();
   const [active, setActive] = useState(0);
   const [images, setImages] = useState(product.subProducts[active]?.images);
   const [prices, setPrices] = useState(
@@ -22,6 +31,46 @@ export default function ProductCard({ product }) {
       return p.color;
     })
   );
+
+  const addToCartHandler = async () => {
+    // if (!router.query.size) {
+    //   setError("Please Select a size");
+    //   return;
+    // }
+    const { data } = await axios.get(
+      `/api/product/${product._id}?style=${0}&size=${router.query.size || 0}`
+    );
+    if (qty > data.quantity) {
+      toast.error(
+        "The Quantity you have choosed is more than in stock. Try and lower the Qty"
+      );
+    } else if (data.quantity < 1) {
+      toast.error("This Product is out of stock.");
+      return;
+    } else {
+      let _uid = `${data._id}_${product.style}_${router.query.size || 0}`;
+      let exist = cart.cartItems.find((p) => p._uid === _uid);
+      if (exist) {
+        let newCart = cart.cartItems.map((p) => {
+          if (p._uid == exist._uid) {
+            return { ...p, qty: qty };
+          }
+          return p;
+        });
+        dispatch(updateCart(newCart));
+      } else {
+        dispatch(
+          addToCart({
+            ...data,
+            qty,
+            size: data.size,
+            _uid,
+          })
+        );
+      }
+    }
+  };
+
   useEffect(() => {
     setImages(product.subProducts[active].images);
     setPrices(
@@ -38,7 +87,12 @@ export default function ProductCard({ product }) {
     <div className={styles.product}>
       <div className={styles.product__container}>
         <div>
-          <ProductSwiper slug={product.slug} active={active} images={images} />
+          <ProductSwiper
+            slug={product.slug}
+            active={active}
+            images={images}
+            addToCartHandler={addToCartHandler}
+          />
         </div>
 
         {product.subProducts[active].discount ? (
