@@ -7,7 +7,7 @@ export const saveCart = async (cart) => {
     });
     return data;
   } catch (error) {
-    return response.data.error.message;
+    return error.response ? error.response.data.error.message : error.message;
   }
 };
 export const saveAddress = async (address, userId) => {
@@ -18,7 +18,7 @@ export const saveAddress = async (address, userId) => {
     });
     return data;
   } catch (error) {
-    return error.response.data.message;
+    return error.response ? error.response.data.error.message : error.message;
   }
 };
 export const changeActiveAddress = async (id) => {
@@ -28,7 +28,7 @@ export const changeActiveAddress = async (id) => {
     });
     return data;
   } catch (error) {
-    return error.response.data.message;
+    return error.response ? error.response.data.error.message : error.message;
   }
 };
 export const deleteAddress = async (id) => {
@@ -38,7 +38,7 @@ export const deleteAddress = async (id) => {
     });
     return data;
   } catch (error) {
-    return error.response.data.message;
+    return error.response ? error.response.data.error.message : error.message;
   }
 };
 export const applyCoupon = async (coupon) => {

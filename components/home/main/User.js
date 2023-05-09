@@ -33,7 +33,7 @@ export default function User() {
         ) : (
           <div className={styles.user__infos}>
             <img
-              src="https://res.cloudinary.com/dmhcnhtng/image/upload/v1664642478/992490_b0iqzq.png"
+              src="https://res.cloudinary.com/dhbe6fwuv/image/upload/v1683512114/default-avatar_gokgqg.png"
               alt=""
             />
             <div className={styles.user__infos_btns}>
@@ -90,7 +90,7 @@ export default function User() {
               marginTop: "1rem",
             }}
           >
-            {userSwiperArray.map((item,idx) => (
+            {userSwiperArray.map((item, idx) => (
               <SwiperSlide key={idx}>
                 <Link href="">
                   <img src={item.image} alt="" />

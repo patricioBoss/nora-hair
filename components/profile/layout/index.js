@@ -4,7 +4,7 @@ import Header from "../../header";
 import Sidebar from "../sidebar";
 export default function Layout({ session, tab, children }) {
   return (
-    <div className={styles.layout}>
+    <div className={styles.layout + "  md:gap-12"}>
       <Head>
         <title>{session?.user?.name}</title>
       </Head>

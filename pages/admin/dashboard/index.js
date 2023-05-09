@@ -12,6 +12,7 @@ import { SlHandbag, SlEye } from "react-icons/sl";
 import { SiProducthunt } from "react-icons/si";
 import { GiTakeMyMoney } from "react-icons/gi";
 import Link from "next/link";
+import { fCurrency } from "../../../utils/formatNumber";
 export default function Dashboard({ users, orders, products }) {
   const { data: session } = useSession();
   return (
@@ -64,13 +65,15 @@ export default function Dashboard({ users, orders, products }) {
               <GiTakeMyMoney />
             </div>
             <div className={styles.card__infos}>
-              <h4>+{orders.reduce((a, val) => a + val.total, 0)}$</h4>
+              <h4>+{fCurrency(orders.reduce((a, val) => a + val.total, 0))}</h4>
               <h5>
                 -
-                {orders
-                  .filter((o) => !o.isPaid)
-                  .reduce((a, val) => a + val.total, 0)}
-                $ Unpaid yet.
+                {fCurrency(
+                  orders
+                    .filter((o) => !o.isPaid)
+                    .reduce((a, val) => a + val.total, 0)
+                )}
+                Unpaid yet.
               </h5>
               <span>Total Earnings</span>
             </div>
@@ -96,7 +99,7 @@ export default function Dashboard({ users, orders, products }) {
                 {orders.map((order) => (
                   <tr key={order._id}>
                     <td>{order.user.name}</td>
-                    <td>{order.total} $</td>
+                    <td>{fCurrency(order.total)}</td>
                     <td>
                       {order.isPaid ? (
                         <img src="../../../images/verified.webp" alt="" />
@@ -166,9 +169,8 @@ Dashboard.auth = {
   role: "admin",
 };
 
-
 export async function getServerSideProps({ req }) {
-  const users = await User.find().lean();
+  const users = await User.find().limit(8).lean();
   const orders = await Order.find()
     .populate({ path: "user", model: User })
     .lean();

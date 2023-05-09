@@ -98,7 +98,12 @@ export default function Home({
         <Container>
           <LandingCategories />
           <Filter categories={categories} handleChange={handleChange} />
-          <div className={styles.products}>
+          <div
+            className={
+              styles.products +
+              " grid grid-cols-2 md:grid-cols-3 lg:grid-cols-4"
+            }
+          >
             {filterProducts.map((product) => (
               <ProductCard product={product} key={product._id} />
             ))}

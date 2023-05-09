@@ -8,7 +8,7 @@ import { ShoppingBagIcon } from "@heroicons/react/24/outline";
 import { toggleSlider } from "../../store/cartSlice";
 export default function Main({ searchHandler }) {
   const router = useRouter();
-  const dispatch=useDispatch()
+  const dispatch = useDispatch();
   const [query, setQuery] = useState(router.query.search || "");
   const { cart } = useSelector((state) => ({ ...state }));
   const handleSearch = (e) => {
@@ -25,8 +25,9 @@ export default function Main({ searchHandler }) {
     <div className={styles.main + " !sticky top-0 z-[1000] bg-white"}>
       <div className={styles.main__container}>
         <Link href="/">
-            <img src="/logo/nora-logo.png"  className="w-14" alt="" />
-
+          <a>
+            <img src="/logo/nora-logo.png" className="w-14" alt="" />
+          </a>
         </Link>
         <form onSubmit={(e) => handleSearch(e)} className={styles.search}>
           <input
@@ -39,14 +40,17 @@ export default function Main({ searchHandler }) {
             <RiSearch2Line />
           </button>
         </form>
-        
-          <span className={styles.cart+ " cursor-pointer"} onClick={()=>dispatch(toggleSlider())}>
+
+        <span
+          className={styles.cart + " cursor-pointer"}
+          onClick={() => dispatch(toggleSlider())}
+        >
           <ShoppingBagIcon
-                      className="h-8 w-8 flex-shrink-0 text-gray-400 group-hover:text-gray-500"
-                      aria-hidden="true"
-                    />
+            className="h-8 w-8 flex-shrink-0 text-gray-400 group-hover:text-gray-500"
+            aria-hidden="true"
+          />
           {!!cart.cartItems.length && <span>{cart.cartItems.length}</span>}
-          </span>
+        </span>
       </div>
     </div>
   );

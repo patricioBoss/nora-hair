@@ -54,7 +54,7 @@ export default function ProductCard({ product }) {
               ? `${product.name.substring(0, 40)}...`
               : product.name}
           </h1>
-          <span className=" !font-semibold !text-2xl !text-black">
+          <span className=" !font-semibold !text-lg md:!text-2xl !text-black">
             {prices.length === 1
               ? `${fCurrency(prices[0])}`
               : `${fCurrency(prices[0])}-${fCurrency(

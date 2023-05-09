@@ -7,6 +7,14 @@ export default function profile({ user, tab }) {
 export async function getServerSideProps(ctx) {
   const { query, req } = ctx;
   const session = await getSession({ req });
+  console.log(session);
+  if (!session?.user) {
+    return {
+      redirect: {
+        destination: "/signin",
+      },
+    };
+  }
   const tab = query.tab || 0;
   return {
     props: { user: session, tab },

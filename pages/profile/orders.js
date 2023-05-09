@@ -8,6 +8,7 @@ import Order from "../../models/Order";
 import styles from "../../styles/profile.module.scss";
 import { FiExternalLink } from "react-icons/fi";
 import slugify from "slugify";
+import { fCurrency } from "../../utils/formatNumber";
 export default function Orders({ user, tab, orders }) {
   const router = useRouter();
   return (
@@ -45,53 +46,53 @@ export default function Orders({ user, tab, orders }) {
 
         <div className="-my-2 -mx-4 overflow-x-auto sm:-mx-6 lg:-mx-8">
           <div className="inline-block min-w-full py-2 align-middle md:px-6 lg:px-8">
-        <table>
-          <thead className="py-2">
-            <tr>
-              <td>Order id</td>
-              <td>Products</td>
-              <td>Payment Method</td>
-              <td>Total</td>
-              <td>Paid</td>
-              <td>Status</td>
-              <td>view</td>
-            </tr>
-          </thead>
-          <tbody>
-            {orders.map((order) => (
-              <tr key={order._id}>
-                <td>{order._id}</td>
-                <td className={styles.orders__images}>
-                  {order.products.map((p) => (
-                    <img src={p.image} key={p._id} alt="" />
-                  ))}
-                </td>
-                <td>
-                  {order.paymentMethod == "paypal"
-                    ? "Paypal"
-                    : order.paymentMethod == "credit_card"
-                    ? "Credit Card"
-                    : "COD"}
-                </td>
-                <td>{order.total}$</td>
-                <td className={styles.orders__paid}>
-                  {order.isPaid ? (
-                    <img src="../../../images/verified.png" alt="" />
-                  ) : (
-                    <img src="../../../images/unverified.png" alt="" />
-                  )}
-                </td>
-                <td>{order.status}</td>
-                <td>
-                  <Link href={`/order/${order._id}`}>
-                    <FiExternalLink />
-                  </Link>
-                </td>
-              </tr>
-            ))}
-          </tbody>
-        </table>
-        </div>
+            <table>
+              <thead className="py-2">
+                <tr>
+                  <td>Order id</td>
+                  <td>Products</td>
+                  <td>Payment Method</td>
+                  <td>Total</td>
+                  <td>Paid</td>
+                  <td>Status</td>
+                  <td>view</td>
+                </tr>
+              </thead>
+              <tbody>
+                {orders.map((order) => (
+                  <tr key={order._id}>
+                    <td>{order._id}</td>
+                    <td className={styles.orders__images}>
+                      {order.products.map((p) => (
+                        <img src={p.image} key={p._id} alt="" />
+                      ))}
+                    </td>
+                    <td>
+                      {order.paymentMethod == "paypal"
+                        ? "Paypal"
+                        : order.paymentMethod == "credit_card"
+                        ? "Credit Card"
+                        : "COD"}
+                    </td>
+                    <td>{fCurrency(order.total)}</td>
+                    <td className={styles.orders__paid}>
+                      {order.isPaid ? (
+                        <img src="../../../images/verified.png" alt="" />
+                      ) : (
+                        <img src="../../../images/unverified.png" alt="" />
+                      )}
+                    </td>
+                    <td>{order.status}</td>
+                    <td>
+                      <Link href={`/order/${order._id}`}>
+                        <FiExternalLink />
+                      </Link>
+                    </td>
+                  </tr>
+                ))}
+              </tbody>
+            </table>
+          </div>
         </div>
       </div>
     </Layout>

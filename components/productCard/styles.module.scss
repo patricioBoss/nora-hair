@@ -1,9 +1,9 @@
 .product {
   position: relative;
-  width: 290px;
-  @media (max-width: 800px) {
-    width: 240px;
-  }
+  // width: 290px;
+  // @media (max-width: 800px) {
+  //   width: 240px;
+  // }
   &__infos {
     width: 100%;
     margin-top: 1px;
@@ -75,4 +75,3 @@
     }
   }
 }
-

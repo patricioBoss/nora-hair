@@ -84,6 +84,8 @@ export default function Shipping({ user, addresses, setAddresses, profile }) {
   };
   const saveShippingHandler = async () => {
     const res = await saveAddress(shipping);
+    if (res?.addresses) setVisible(false);
+    console.log({ res });
     setAddresses(res.addresses);
   };
   const changeActiveHandler = async (id) => {
@@ -98,7 +100,9 @@ export default function Shipping({ user, addresses, setAddresses, profile }) {
     <div className={styles.shipping}>
       {!profile && (
         <div className={styles.header}>
-          <h3 className=" font-semibold text-3xl mt-7 mb-3">Shipping Informations</h3>
+          <h3 className=" font-semibold text-3xl mt-7 mb-3">
+            Shipping Informations
+          </h3>
         </div>
       )}
       <div className={styles.addresses}>

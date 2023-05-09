@@ -24,7 +24,7 @@ const userSchema = new mongoose.Schema(
     image: {
       type: String,
       default:
-        "https://res.cloudinary.com/dmhcnhtng/image/upload/v1664642478/992490_b0iqzq.png",
+        "https://res.cloudinary.com/dhbe6fwuv/image/upload/v1683512114/default-avatar_gokgqg.png",
     },
     emailVerified: {
       type: Boolean,

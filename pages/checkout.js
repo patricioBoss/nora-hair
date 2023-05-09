@@ -88,11 +88,11 @@ export async function getServerSideProps(context) {
       product: x.product._id,
       quantity: x.product.subProducts[0].sizes.find(
         (size) => size.size === x.size
-      ).qty,
+      )?.qty,
       inStock:
         Number(
           x.product.subProducts[0].sizes.find((size) => size.size === x.size)
-            .qty
+            ?.qty
         ) > x.qty,
     })),
   };

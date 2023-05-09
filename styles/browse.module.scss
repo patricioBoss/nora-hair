@@ -28,9 +28,9 @@
       }
     }
     &_products {
-      display: flex;
+      // display: flex;  flex-wrap: wrap;
       width: 100%;
-      flex-wrap: wrap;
+
       gap: 1rem;
     }
   }
@@ -92,7 +92,6 @@
     width: calc(100% - 316px);
     @media (max-width: 450px) {
       width: 100%;
-
-  }
+    }
   }
 }

@@ -2,6 +2,7 @@ import nc from "next-connect";
 import crypto from "crypto";
 import Order from "../../models/Order";
 import db from "../../utils/db";
+import Product from "../../models/Product";
 
 const handler = nc();
 
@@ -22,6 +23,7 @@ handler.post(async (req, res) => {
   }
 
   await db.connectDb();
+  const session = await db.startSession();
   const event = req.body;
   console.log("this is the event", req.body);
   const { event: eventType, data } = event;
@@ -38,18 +40,49 @@ handler.post(async (req, res) => {
       `Payment received. Reference: ${reference}. Amount: ${amount}. Email: ${email}`
     );
 
-    const order = await Order.findById(value);
+    const order = await Order.findById(value).populate("products.product");
+    const productsFilter = order.products.map((x) => ({
+      product: x.product._id,
+      qty: x.qty,
+      sizeIndex: x.product.subProducts[0].sizes.indexOf(
+        (size) => size.size === x.size
+      ),
+    }));
     if (order) {
-      order.isPaid = true;
-      order.paidAt = Date.now();
-      order.paymentResult = {
-        id: reference,
-        status: status,
-        email_address: email,
-      };
-      const newOrder = await order.save();
+      const latestOrder = await session.withTransaction(async () => {
+        const newOrder = await Order.findByIdAndUpdate(
+          value,
+          {
+            isPaid: true,
+            paidAt: Date.now(),
+            paymentResult: {
+              id: reference,
+              status: status,
+              email_address: email,
+            },
+          },
+          { session }
+        );
+
+        //const newOrder = await order.save();
+        let productsUpdate = productsFilter.map(
+          ({ product, sizeIndex, qty }) => ({
+            updateOne: {
+              filter: { _id: product },
+              update: { $inc: { [`sizes.${sizeIndex}.qty`]: -Number(qty) } },
+            },
+          })
+        );
+        //db.listing.updateMany({ "_id": { "$in": ids }}, { "$set": { "Supplier": "S" }});
+        await Product.bulkWrite([...productsUpdate], {
+          session,
+        });
+
+        return newOrder;
+      });
+
       await db.disconnectDb();
-      res.status(200).json({ message: "Order is paid.", order: newOrder });
+      res.status(200).json({ message: "Order is paid.", order: latestOrder });
     } else {
       await db.disconnectDb();
       res.status(404).json({ message: "Order is not found." });

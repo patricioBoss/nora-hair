@@ -1,15 +1,13 @@
 import Link from "next/link";
 import React from "react";
-import {ChevronRightIcon,EnvelopeIcon} from "@heroicons/react/24/outline"
+import { ChevronRightIcon, EnvelopeIcon } from "@heroicons/react/24/outline";
 import { BsTelegram } from "react-icons/bs";
 import { Container } from "../Container";
 
-
-
-const socials=[
+const socials = [
   {
-    name: 'Facebook',
-    href: '#',
+    name: "Facebook",
+    href: "#",
     icon: (props) => (
       <svg fill="currentColor" viewBox="0 0 24 24" {...props}>
         <path
@@ -21,8 +19,8 @@ const socials=[
     ),
   },
   {
-    name: 'Instagram',
-    href: 'https://www.instagram.com/norahair_forest/',
+    name: "Instagram",
+    href: "https://www.instagram.com/norahair_forest/",
     icon: (props) => (
       <svg fill="currentColor" viewBox="0 0 24 24" {...props}>
         <path
@@ -34,8 +32,8 @@ const socials=[
     ),
   },
   {
-    name: 'Twitter',
-    href: '#',
+    name: "Twitter",
+    href: "#",
     icon: (props) => (
       <svg fill="currentColor" viewBox="0 0 24 24" {...props}>
         <path d="M8.29 20.251c7.547 0 11.675-6.253 11.675-11.675 0-.178 0-.355-.012-.53A8.348 8.348 0 0022 5.92a8.19 8.19 0 01-2.357.646 4.118 4.118 0 001.804-2.27 8.224 8.224 0 01-2.605.996 4.107 4.107 0 00-6.993 3.743 11.65 11.65 0 01-8.457-4.287 4.106 4.106 0 001.27 5.477A4.072 4.072 0 012.8 9.713v.052a4.105 4.105 0 003.292 4.022 4.095 4.095 0 01-1.853.07 4.108 4.108 0 003.834 2.85A8.233 8.233 0 012 18.407a11.616 11.616 0 006.29 1.84" />
@@ -43,8 +41,8 @@ const socials=[
     ),
   },
   {
-    name: 'YouTube',
-    href: '#',
+    name: "YouTube",
+    href: "#",
     icon: (props) => (
       <svg fill="currentColor" viewBox="0 0 24 24" {...props}>
         <path
@@ -55,7 +53,7 @@ const socials=[
       </svg>
     ),
   },
-]
+];
 const Footer = () => {
   return (
     <footer className="footer bg-black relative text-gray-200">
@@ -73,69 +71,78 @@ const Footer = () => {
                     />
                   </a>
                   <p className="mt-2 mb-3 text-gray-300">
-                  Norahairforest is a leading company that specializes in selling high-quality hair wigs and braids. 
-            With a commitment to providing customers with the best possible products, 
-            Norahairforest offers a wide variety of styles and colors to choose from. 
+                    Norahairforest is a leading company that specializes in
+                    selling high-quality hair wigs and braids. With a commitment
+                    to providing customers with the best possible products,
+                    Norahairforest offers a wide variety of styles and colors to
+                    choose from.
                   </p>
                   <div className="flex space-x-6 md:order-2">
-              {socials.map((item) => (
-                <a key={item.name} href={item.href} className="text-gray-200 hover:text-gray-300">
-                  <span className="sr-only">{item.name}</span>
-                  <item.icon className="h-6 w-6" aria-hidden="true" />
-                </a>
-              ))}
-              <a href="https://t.me/+hUSmZWyqunI1Zjg8" className="text-gray-200 hover:text-gray-300"> <BsTelegram className="h-6 w-6" /></a>
-             
-            </div>
+                    {socials.map((item) => (
+                      <a
+                        key={item.name}
+                        href={item.href}
+                        className="text-gray-200 hover:text-gray-300"
+                      >
+                        <span className="sr-only">{item.name}</span>
+                        <item.icon className="h-6 w-6" aria-hidden="true" />
+                      </a>
+                    ))}
+                    <a
+                      href="https://t.me/+hUSmZWyqunI1Zjg8"
+                      className="text-gray-200 hover:text-gray-300"
+                    >
+                      {" "}
+                      <BsTelegram className="h-6 w-6" />
+                    </a>
+                  </div>
                 </div>
 
                 <div className="lg:col-span-2 md:col-span-4">
                   <h5 className="tracking-[1px] text-gray-100 font-semibold">
-                    Categories
+                    My Account
                   </h5>
                   <ul className="list-none footer-list mt-6">
                     <li>
                       <Link
-                        href="/#about"
+                        href="/profile"
                         className="text-gray-300 hover:text-gray-400 duration-500 ease-in-out"
                       >
-                     <a> <ChevronRightIcon className="h-4 w-4"/> About us</a>  
-                      </Link>
-                    </li>
-                    <li className="mt-[10px]">
-                      <a
-                        href="page-services.html"
-                        className="text-gray-300 hover:text-gray-400 duration-500 ease-in-out"
-                      >
-                      <><ChevronRightIcon className="h-4 w-4"/> Real
-                        Estate</>  
-                      </a>
-                    </li>
-                    <li className="mt-[10px]">
-                      <Link
-                        href="/cryptocurrency"
-                        className="text-gray-300 hover:text-gray-400 duration-500 ease-in-out"
-                      >
-                     <a><ChevronRightIcon className="h-4 w-4"/>{" "}
-                        Cryptocurrency</a>   
+                        <a>
+                          {" "}
+                          <ChevronRightIcon className="h-4 w-4" /> Profile
+                        </a>
                       </Link>
                     </li>
                     <li className="mt-[10px]">
                       <Link
-                        href="/stocks"
+                        href="/profile/orders"
                         className="text-gray-300 hover:text-gray-400 duration-500 ease-in-out"
                       >
-                      <a><ChevronRightIcon className="h-4 w-4"/>{" "}
-                        Stocks/Bonds</a>  
+                        <a>
+                          <ChevronRightIcon className="h-4 w-4" /> Orders
+                        </a>
+                      </Link>
+                    </li>
+                    <li className="mt-[10px]">
+                      <Link
+                        href="/profile/addresses"
+                        className="text-gray-300 hover:text-gray-400 duration-500 ease-in-out"
+                      >
+                        <a>
+                          <ChevronRightIcon className="h-4 w-4" /> Addresses
+                        </a>
                       </Link>
                     </li>
 
                     <li className="mt-[10px]">
                       <Link
-                        href="/login"
+                        href="/signin"
                         className="text-gray-300 hover:text-gray-400 duration-500 ease-in-out"
                       >
-                      <a><ChevronRightIcon className="h-4 w-4"/> Login</a>  
+                        <a>
+                          <ChevronRightIcon className="h-4 w-4" /> Sign In
+                        </a>
                       </Link>
                     </li>
                   </ul>
@@ -147,15 +154,15 @@ const Footer = () => {
                   </h5>
                   <ul className="list-none footer-list mt-6">
                     <li>
-                      <a
-                        href="#"
-                        target={"_blank"}
-                        rel="noreferrer"
+                      <Link
+                        href="/browse"
                         className="text-gray-300 hover:text-gray-400 duration-500 ease-in-out"
                       >
-                        <ChevronRightIcon className="h-4 w-4"/> Terms of
-                        Services
-                      </a>
+                        <a>
+                          <ChevronRightIcon className="h-4 w-4" /> Browse
+                          Products
+                        </a>
+                      </Link>
                     </li>
                     <li className="mt-[10px]">
                       <a
@@ -164,19 +171,18 @@ const Footer = () => {
                         rel="noreferrer"
                         className="text-gray-300 hover:text-gray-400 duration-500 ease-in-out"
                       >
-                        <ChevronRightIcon className="h-4 w-4"/> Privacy
-                        Policy
+                        <ChevronRightIcon className="h-4 w-4" /> Privacy Policy
                       </a>
                     </li>
                     <li className="mt-[10px]">
                       <a
-                        href="https://wa.me/234810006238"
+                        href="https://wa.me/2348100006238"
                         className="text-gray-300 hover:text-gray-400 duration-500 ease-in-out"
                       >
-                        <ChevronRightIcon className="h-4 w-4"/> Contact
-                        Us on Whatsapp
+                        <ChevronRightIcon className="h-4 w-4" /> Contact Us on
+                        Whatsapp
                         <br />
-                        (+234810006238)
+                        (+2348100006238)
                       </a>
                     </li>
                     {/* <li className="mt-[10px]">
@@ -213,7 +219,7 @@ const Footer = () => {
                           <span className="text-red-600">*</span>
                         </label>
                         <div className="form-icon relative mt-2">
-                        <EnvelopeIcon className=" h-4 absolute left-3 top-1/2 -translate-y-1/2"/>
+                          <EnvelopeIcon className=" h-4 absolute left-3 top-1/2 -translate-y-1/2" />
                           <input
                             type="email"
                             className="form-input bg-gray-800 border border-gray-800 text-gray-100 pl-12 focus:shadow-none"

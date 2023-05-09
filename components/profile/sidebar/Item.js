@@ -13,7 +13,10 @@ export default function Item({ item, visible, index }) {
       {item.heading == "Sign out" ? (
         <b onClick={() => signOut()}>Sign out</b>
       ) : (
-        <b className="flex gap-10" onClick={() => setShow((prev) => !prev)}>
+        <b
+          className="flex justify-between mb-8 hover:cursor-pointer"
+          onClick={() => setShow((prev) => !prev)}
+        >
           {item.heading} {show ? <HiMinusSm /> : <HiPlusSm />}
         </b>
       )}
