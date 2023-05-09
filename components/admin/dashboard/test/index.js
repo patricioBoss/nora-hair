@@ -109,4 +109,4 @@ const Index = ({ userImage }) => {
   );
 };
 
-export default index;
+export default Index;

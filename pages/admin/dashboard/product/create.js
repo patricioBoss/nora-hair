@@ -69,7 +69,6 @@ export default function Create({ parents, categories }) {
   const dispatch = useDispatch();
   console.log(product);
 
-
   useEffect(() => {
     const getParentData = async () => {
       const { data } = await axios.get(`/api/product/${product.parent}`);
@@ -90,8 +89,6 @@ export default function Create({ parents, categories }) {
     getParentData();
   }, [product.parent]);
 
-
-
   useEffect(() => {
     async function getSubs() {
       const { data } = await axios.get("/api/admin/subCategory", {
@@ -104,7 +101,7 @@ export default function Create({ parents, categories }) {
     }
     getSubs();
   }, [product.category]);
-  
+
   const handleChange = (e) => {
     const { value, name } = e.target;
     setProduct({ ...product, [name]: value });
@@ -139,8 +136,8 @@ export default function Create({ parents, categories }) {
       );
     }
   };
-  const uploaded_images = [];
-  const style_img = "";
+  let uploaded_images = [];
+  let style_img = "";
   const createProductHandler = async () => {
     setLoading(true);
     if (images) {

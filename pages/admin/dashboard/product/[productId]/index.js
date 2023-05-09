@@ -59,14 +59,14 @@ const initialState = {
   ],
   shippingFee: "",
 };
-export default function Create({ parents, categories,productInfo }) {
-  const [product, setProduct] = useState( {
+export default function Create({ parents, categories, productInfo }) {
+  const [product, setProduct] = useState({
     name: productInfo.name,
     description: productInfo.description,
     brand: productInfo.brand,
     sku: productInfo.subProducts[0].sku,
     discount: productInfo.subProducts[0].discount,
-    images: productInfo.subProducts[0].images.map(image=>image.url),
+    images: productInfo.subProducts[0].images.map((image) => image.url),
     description_images: productInfo.subProducts[0].description_images,
     parent: "",
     category: productInfo.category,
@@ -79,14 +79,15 @@ export default function Create({ parents, categories,productInfo }) {
   });
   const [subs, setSubs] = useState(productInfo.subCategories);
   const [colorImage, setColorImage] = useState("");
-  const [images, setImages] = useState(productInfo.subProducts[0].images.map(image=>image.url));
-console.log(productInfo)
-  console.log(images,"these are the images")
+  const [images, setImages] = useState(
+    productInfo.subProducts[0].images.map((image) => image.url)
+  );
+  console.log(productInfo);
+  console.log(images, "these are the images");
   const [description_images, setDescription_images] = useState("");
   const [loading, setLoading] = useState(false);
   const dispatch = useDispatch();
   console.log(product);
-
 
   useEffect(() => {
     async function getSubs() {
@@ -100,7 +101,7 @@ console.log(productInfo)
     }
     getSubs();
   }, [product.category]);
-  
+
   const handleChange = (e) => {
     const { value, name } = e.target;
     setProduct({ ...product, [name]: value });
@@ -135,16 +136,18 @@ console.log(productInfo)
       );
     }
   };
-  const uploaded_images = [];
-  const style_img = "";
+  let uploaded_images = [];
+  let style_img = "";
   const updateProductHandler = async () => {
-    setLoading(true);     
-    let urlImages=images.filter(img=>!img.startsWith("data"))
-    let unloadedImages=images.filter(img=>img.startsWith("data"))
+    setLoading(true);
+    let urlImages = images.filter((img) => !img.startsWith("data"));
+    let unloadedImages = images.filter((img) => img.startsWith("data"));
     if (unloadedImages.length) {
-      let temp = images.filter(img=>img.startsWith("data")).map((img) => {
-        return dataURItoBlob(img);
-      });
+      let temp = images
+        .filter((img) => img.startsWith("data"))
+        .map((img) => {
+          return dataURItoBlob(img);
+        });
       const path = "product images";
       let formData = new FormData();
       formData.append("path", path);
@@ -161,18 +164,21 @@ console.log(productInfo)
       formData.append("file", temp);
       let cloudinary_style_img = await uploadImages(formData);
       style_img = cloudinary_style_img[0].url;
-    }else{
-      style_img=product.color.image
+    } else {
+      style_img = product.color.image;
     }
     try {
-      const { data } = await axios.put(`/api/admin/product/${productInfo._id}`, {
-        ...product,
-        images: [...uploaded_images,...urlImages],
-        color: {
-          image: style_img,
-          color: product.color.color,
-        },
-      });
+      const { data } = await axios.put(
+        `/api/admin/product/${productInfo._id}`,
+        {
+          ...product,
+          images: [...uploaded_images, ...urlImages],
+          color: {
+            image: style_img,
+            color: product.color.color,
+          },
+        }
+      );
       setLoading(false);
       toast.success(data.message);
     } catch (error) {
@@ -339,18 +345,17 @@ console.log(productInfo)
 
 export async function getServerSideProps(ctx) {
   db.connectDb();
-  const productId=ctx.params?.productId;
+  const productId = ctx.params?.productId;
   const product = await Product.findById(productId).lean();
   const results = await Product.find().select("name subProducts").lean();
   const categories = await Category.find().lean();
-  console.log(product)
+  console.log(product);
   db.disconnectDb();
   return {
     props: {
-      productInfo:JSON.parse(JSON.stringify(product)),
+      productInfo: JSON.parse(JSON.stringify(product)),
       parents: JSON.parse(JSON.stringify(results)),
       categories: JSON.parse(JSON.stringify(categories)),
     },
   };
 }
-
