@@ -38,7 +38,7 @@ export default function ProductCard({ product }) {
     //   return;
     // }
     const { data } = await axios.get(
-      `/api/product/${product._id}?style=${0}&size=${router.query.size || 0}`
+      `/api/product/${product._id}?style=${0}&size=${router.query?.size || 0}`
     );
     if (qty > data.quantity) {
       toast.error(
@@ -48,7 +48,7 @@ export default function ProductCard({ product }) {
       toast.error("This Product is out of stock.");
       return;
     } else {
-      let _uid = `${data._id}_${product.style}_${router.query.size || 0}`;
+      let _uid = `${data._id}_${product.style || 0}_${router.query?.size || 0}`;
       let exist = cart.cartItems.find((p) => p._uid === _uid);
       if (exist) {
         let newCart = cart.cartItems.map((p) => {
@@ -103,7 +103,7 @@ export default function ProductCard({ product }) {
           ""
         )}
         <div className={styles.product__infos}>
-          <h1 className=" !font-medium !text-base !text-ellipsis !overflow-hidden">
+          <h1 className=" !font-medium text-sm md:!text-base !leading-4 !text-center !text-ellipsis !overflow-hidden">
             {product.name.length > 40
               ? `${product.name.substring(0, 40)}...`
               : product.name}

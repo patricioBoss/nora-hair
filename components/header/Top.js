@@ -18,12 +18,6 @@ export default function Top({ country }) {
             <img src={country?.flag} alt="" />
             <span>{country?.name} / NGN</span>
           </li>
-          <li className={styles.li}>
-            <BsSuitHeart />
-            <Link href="/profile/whishlist">
-              <span>Whishlist</span>
-            </Link>
-          </li>
           <li
             className={styles.li}
             onMouseOver={() => setVisible(true)}

@@ -68,7 +68,7 @@ export default function ProductSwiper({
         <button
           type="button"
           onClick={addToCartHandler}
-          className={`relative inline-flex items-center text-center justify-center rounded-md border border-transparent bg-black  px-4 py-3 w-[90%] text-base font-medium text-white shadow-sm hover:bg-gray-900 focus:outline-none focus:ring-2 focus:ring-gray-800 focus:ring-offset-2`}
+          className={`relative inline-flex items-center text-center justify-center rounded-md border border-transparent bg-black  px-4 py-3 w-[90%] text-sm font-medium text-white shadow-sm hover:bg-gray-900 focus:outline-none focus:ring-2 focus:ring-gray-800 focus:ring-offset-2`}
         >
           Add to Cart
         </button>
