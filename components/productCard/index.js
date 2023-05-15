@@ -108,15 +108,15 @@ export default function ProductCard({ product }) {
               ? `${product.name.substring(0, 40)}...`
               : product.name}
           </h1>
-          <span className=" !font-semibold !text-lg md:!text-2xl !text-black">
+          <p className=" !font-semibold !text-center !text-lg md:!text-2xl !text-black">
             {prices.length === 1
               ? `${fCurrency(prices[0])}`
               : `${fCurrency(prices[0])}-${fCurrency(
                   prices[prices.length - 1]
                 )}`}
-          </span>
+          </p>
           <div className={styles.product__colors}>
-            {styless &&
+            {/* {styless &&
               styless.map((style, i) =>
                 style.image ? (
                   <img
@@ -139,7 +139,7 @@ export default function ProductCard({ product }) {
                     }}
                   ></span>
                 )
-              )}
+              )} */}
           </div>
         </div>
       </div>

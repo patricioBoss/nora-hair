@@ -6,7 +6,9 @@ import admin from "../../../../middleware/admin";
 import slugify from "slugify";
 const handler = nc().use(auth).use(admin);
 
-handler.post(async (req, res) => {
+handler.put(async (req, res) => {
+  // console.log([req.params?.productId, req.query?.productId]);
+
   try {
     db.connectDb();
     if (req.body.parent) {
@@ -33,25 +35,29 @@ handler.post(async (req, res) => {
       }
     } else {
       req.body.slug = slugify(req.body.name);
-      const newProduct = new Product.findByIdAndUpdate(req.params.productId,{
-        name: req.body.name,
-        description: req.body.description,
-        brand: req.body.brand,
-        details: req.body.details,
-        questions: req.body.questions,
-        slug: req.body.slug,
-        category: req.body.category,
-        subCategories: req.body.subCategories,
-        subProducts: [
-          {
-            sku: req.body.sku,
-            color: req.body.color,
-            images: req.body.images,
-            sizes: req.body.sizes,
-            discount: req.body.discount,
-          },
-        ],
-      },{new:true});
+      const newProduct = await Product.findByIdAndUpdate(
+        req.query?.productId,
+        {
+          name: req.body.name,
+          description: req.body.description,
+          brand: req.body.brand,
+          details: req.body.details,
+          questions: req.body.questions,
+          slug: req.body.slug,
+          category: req.body.category,
+          subCategories: req.body.subCategories,
+          subProducts: [
+            {
+              sku: req.body.sku,
+              color: req.body.color,
+              images: req.body.images,
+              sizes: req.body.sizes,
+              discount: req.body.discount,
+            },
+          ],
+        },
+        { new: true }
+      );
       await newProduct.save();
       res.status(200).json({ message: "Product created Successfully." });
     }
@@ -60,6 +66,5 @@ handler.post(async (req, res) => {
     res.status(500).json({ message: error.message });
   }
 });
-
 
 export default handler;

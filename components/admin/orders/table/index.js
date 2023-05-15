@@ -19,7 +19,7 @@ import { PencilSquareIcon } from "@heroicons/react/24/outline";
 import UpdateOrder from "../../../UpdateOrder";
 
 function Row(props) {
-  const { row,handleOpen } = props;
+  const { row, handleOpen } = props;
   const [open, setOpen] = React.useState(false);
 
   return (
@@ -83,7 +83,10 @@ function Row(props) {
           <b>{fCurrency(row.total)}</b>
         </TableCell>
         <TableCell align="right">
-          <PencilSquareIcon className=" text-black mx-auto cursor-pointer" onClick={()=>handleOpen(row)}/>
+          <PencilSquareIcon
+            className=" text-black mx-auto cursor-pointer"
+            onClick={() => handleOpen(row)}
+          />
         </TableCell>
       </TableRow>
       <TableRow>
@@ -175,7 +178,7 @@ function Row(props) {
                       align="left"
                       style={{ padding: "20px 0 20px 18px" }}
                     >
-                      <b style={{ fontSize: "20px" }}>{fCurrency(row.total) }</b>
+                      <b style={{ fontSize: "20px" }}>{fCurrency(row.total)}</b>
                     </TableCell>
                   </TableRow>
                 </TableBody>
@@ -207,46 +210,37 @@ Row.propTypes = {
 };
 
 export default function CollapsibleTable({ rows }) {
-  const [order, setOrder] = React.useState('')
-  const [open, setOpen] = React.useState(false)
-  const handleOpen=(order)=>{
-setOrder(order)
-setOpen(true)
-  }
+  const [order, setOrder] = React.useState("");
+  const [open, setOpen] = React.useState(false);
+  const handleOpen = (order) => {
+    setOrder(order);
+    setOpen(true);
+  };
   return (
     <>
-    <TableContainer component={Paper}>
-      <Typography
-        sx={{ flex: "1 1 100%" }}
-        variant="h6"
-        paddingX="5px"
-        id="tableTitle"
-        component="div"
-      >
-        Orders
-      </Typography>
-      <Table aria-label="collapsible table" className={styles.table}>
-        <TableHead>
-          <TableRow>
-            <TableCell />
-            <TableCell>Order</TableCell>
-            <TableCell align="right">Payment Method</TableCell>
-            <TableCell align="right">Paid</TableCell>
-            <TableCell align="right">Status</TableCell>
-            <TableCell align="right">Coupon</TableCell>
-            <TableCell align="right">Total</TableCell>
-            <TableCell align="right">update</TableCell>
-          </TableRow>
-        </TableHead>
-        <TableBody>
-          {rows.map((row) => (
-            <Row key={row.name} row={row} handleOpen={handleOpen} />
-          ))}{console.log(rows)}
-        </TableBody>
-      </Table>
-    </TableContainer>
-<UpdateOrder open={open} setOpen={setOpen} order={order}/>
+      <TableContainer component={Paper}>
+        <Table aria-label="collapsible table" className={styles.table}>
+          <TableHead>
+            <TableRow>
+              <TableCell />
+              <TableCell>Order</TableCell>
+              <TableCell align="right">Payment Method</TableCell>
+              <TableCell align="right">Paid</TableCell>
+              <TableCell align="right">Status</TableCell>
+              <TableCell align="right">Coupon</TableCell>
+              <TableCell align="right">Total</TableCell>
+              <TableCell align="right">update</TableCell>
+            </TableRow>
+          </TableHead>
+          <TableBody>
+            {rows.map((row) => (
+              <Row key={row.name} row={row} handleOpen={handleOpen} />
+            ))}
+            {console.log(rows)}
+          </TableBody>
+        </Table>
+      </TableContainer>
+      <UpdateOrder open={open} setOpen={setOpen} order={order} />
     </>
-
   );
 }

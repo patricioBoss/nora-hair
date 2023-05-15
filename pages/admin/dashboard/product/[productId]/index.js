@@ -79,6 +79,14 @@ export default function Create({ parents, categories, productInfo }) {
   });
   const [subs, setSubs] = useState(productInfo.subCategories);
   const [colorImage, setColorImage] = useState("");
+  const [imagesMap] = useState(
+    productInfo.subProducts[0].images.reduce((acc, image) => {
+      acc[image.url] = image;
+      return acc;
+    }, {})
+  );
+
+  console.log({ imagesMap });
   const [images, setImages] = useState(
     productInfo.subProducts[0].images.map((image) => image.url)
   );
@@ -172,7 +180,10 @@ export default function Create({ parents, categories, productInfo }) {
         `/api/admin/product/${productInfo._id}`,
         {
           ...product,
-          images: [...uploaded_images, ...urlImages],
+          images: [
+            ...uploaded_images,
+            ...urlImages.map((url) => imagesMap[url]),
+          ],
           color: {
             image: style_img,
             color: product.color.color,
@@ -188,7 +199,7 @@ export default function Create({ parents, categories, productInfo }) {
   };
   return (
     <Layout>
-      <div className={styles.header}>Create Product</div>
+      <div className={styles.header}>Edit Product</div>
 
       <Formik
         enableReinitialize

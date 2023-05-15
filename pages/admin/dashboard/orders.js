@@ -5,9 +5,11 @@ import db from "../../../utils/db";
 import Order from "../../../models/Order";
 import User from "../../../models/User";
 import { useState } from "react";
+import { Typography } from "@mui/material";
 export default function Orders({ orders }) {
   const router = useRouter();
-  const [search, setsearch] = useState("");
+  console.log(router.query);
+  const [search, setsearch] = useState(router.query?.id ?? "");
   const textChange = (e) => {
     const { value } = e.target;
     setsearch(value);
@@ -16,6 +18,7 @@ export default function Orders({ orders }) {
     const currentPath = router.pathname;
     router.push(currentPath, {
       query: {
+        ...router.query,
         id: search,
       },
     });
@@ -23,7 +26,16 @@ export default function Orders({ orders }) {
   return (
     <Layout>
       <>
-        <div className=" flex items-stretch">
+        <Typography
+          sx={{ flex: "1 1 100%" }}
+          variant="h6"
+          paddingX="5px"
+          id="tableTitle"
+          component="div"
+        >
+          Orders
+        </Typography>
+        <div className=" flex items-stretch my-6">
           <div className="rounded-md border border-gray-300 px-3 py-2 shadow-sm focus-within:border-black focus-within:ring-1 focus-within:ring-black w-8/12">
             <label
               htmlFor="name"
@@ -34,7 +46,7 @@ export default function Orders({ orders }) {
             <input
               type="text"
               name="name"
-              id="name"
+              value={search}
               onChange={textChange}
               className="block w-full focus:outline-0 !border-0 p-0 text-gray-900 placeholder-gray-500 focus:ring-0 sm:text-sm"
               placeholder="Jane Smith"
@@ -61,7 +73,7 @@ Orders.auth = {
 
 export async function getServerSideProps(ctx) {
   const { query } = ctx;
-  const searchId = query.id.trim() || "";
+  const searchId = query?.id?.trim() || "";
   await db.connectDb();
   if (searchId) {
     const order = await Order.findById(searchId)

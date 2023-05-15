@@ -277,19 +277,20 @@ export async function getServerSideProps(context) {
 
   if (session) {
     return {
-      redirect:  {
-        destination: callbackUrl?callbackUrl:"/",
+      redirect: {
+        destination: callbackUrl ? callbackUrl : "/",
         permanent: false,
       },
     };
   }
   const csrfToken = await getCsrfToken(context);
+  console.log({ csrfToken });
   const providers = Object.values(await getProviders());
   return {
     props: {
       providers,
       csrfToken,
-      callbackUrl:callbackUrl?callbackUrl:null,
+      callbackUrl: callbackUrl ? callbackUrl : null,
     },
   };
 }

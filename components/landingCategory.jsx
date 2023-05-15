@@ -8,13 +8,12 @@ export default function LandingCategory() {
           <h2 className="text-2xl font-bold tracking-tight text-gray-900">
             Shop by Category
           </h2>
-          <a
-            href="#"
-            className="hidden text-sm font-semibold text-gray-600 hover:text-gray-500 sm:block"
-          >
-            Browse all categories
-            <span aria-hidden="true"> &rarr;</span>
-          </a>
+          <Link href={"/browse"}>
+            <a className="hidden text-sm font-semibold text-gray-600 hover:text-gray-500 sm:block">
+              Browse all categories
+              <span aria-hidden="true"> &rarr;</span>
+            </a>
+          </Link>
         </div>
 
         <div className="mt-6 grid grid-cols-1 gap-y-6 sm:grid-cols-2 sm:grid-rows-2 sm:gap-x-6 lg:gap-8">
@@ -31,7 +30,7 @@ export default function LandingCategory() {
             <div className="flex items-end p-6">
               <div>
                 <h3 className="font-semibold text-white">
-                  <Link href={""}>
+                  <Link href={"/browse?sort=newest"}>
                     <a>
                       <span className="absolute inset-0" />
                       New Arrivals
@@ -99,8 +98,8 @@ export default function LandingCategory() {
         </div>
 
         <div className="mt-6 sm:hidden">
-          <Link href={""}>
-            <a className="block text-sm font-semibold text-indigo-600 hover:text-indigo-500">
+          <Link href={"/browse"}>
+            <a className="block text-sm font-semibold text-gray-600 hover:text-gray-500">
               Browse all categories
               <span aria-hidden="true"> &rarr;</span>
             </a>

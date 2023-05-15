@@ -13,7 +13,15 @@ import { SiProducthunt } from "react-icons/si";
 import { GiTakeMyMoney } from "react-icons/gi";
 import Link from "next/link";
 import { fCurrency } from "../../../utils/formatNumber";
-export default function Dashboard({ users, orders, products }) {
+export default function Dashboard({
+  users,
+  orders,
+  productsCount,
+  ordersCount,
+  usersCount,
+  totalUnpaidOrders,
+  totalPaidOrders,
+}) {
   const { data: session } = useSession();
   return (
     <div>
@@ -38,7 +46,7 @@ export default function Dashboard({ users, orders, products }) {
               <TbUsers />
             </div>
             <div className={styles.card__infos}>
-              <h4>+{users.length}</h4>
+              <h4>+{usersCount}</h4>
               <span>Users</span>
             </div>
           </div>
@@ -47,7 +55,7 @@ export default function Dashboard({ users, orders, products }) {
               <SlHandbag />
             </div>
             <div className={styles.card__infos}>
-              <h4>+{orders.length}</h4>
+              <h4>+{ordersCount}</h4>
               <span>Orders</span>
             </div>
           </div>
@@ -56,7 +64,7 @@ export default function Dashboard({ users, orders, products }) {
               <SiProducthunt />
             </div>
             <div className={styles.card__infos}>
-              <h4>+{products.length}</h4>
+              <h4>+{productsCount}</h4>
               <span>Products</span>
             </div>
           </div>
@@ -65,14 +73,9 @@ export default function Dashboard({ users, orders, products }) {
               <GiTakeMyMoney />
             </div>
             <div className={styles.card__infos}>
-              <h4>+{fCurrency(orders.reduce((a, val) => a + val.total, 0))}</h4>
+              <h4>+{fCurrency(totalPaidOrders)}</h4>
               <h5>
-                -
-                {fCurrency(
-                  orders
-                    .filter((o) => !o.isPaid)
-                    .reduce((a, val) => a + val.total, 0)
-                )}
+                -{fCurrency(totalUnpaidOrders)}
                 Unpaid yet.
               </h5>
               <span>Total Earnings</span>
@@ -173,13 +176,31 @@ export async function getServerSideProps({ req }) {
   const users = await User.find().limit(8).lean();
   const orders = await Order.find()
     .populate({ path: "user", model: User })
+    .sort({ updatedAt: -1 })
+    .limit(10)
     .lean();
-  const products = await Product.find().lean();
+  const totalPaidOrders = await Order.aggregate([
+    { $match: { isPaid: true } },
+    { $group: { _id: null, totalPrice: { $sum: "$total" } } },
+  ]);
+
+  const totalUnpaidOrders = await Order.aggregate([
+    { $match: { isPaid: false } },
+    { $group: { _id: null, totalPrice: { $sum: "$total" } } },
+  ]);
+  console.log({ totalPaidOrders, totalUnpaidOrders });
+  const products = await Product.count().lean();
+  const ordersCount = await Order.count().lean();
+  const usersCount = await User.count().lean();
   return {
     props: {
       users: JSON.parse(JSON.stringify(users)),
       orders: JSON.parse(JSON.stringify(orders)),
-      products: JSON.parse(JSON.stringify(products)),
+      totalPaidOrders: totalPaidOrders[0]?.totalPrice ?? 0,
+      totalUnpaidOrders: totalUnpaidOrders[0]?.totalPrice ?? 0,
+      productsCount: products,
+      ordersCount: ordersCount,
+      usersCount: usersCount,
     },
   };
 }

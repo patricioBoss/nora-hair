@@ -26,7 +26,11 @@ export default function Top({ country }) {
             {session ? (
               <li className={styles.li}>
                 <div className={styles.flex}>
-                  <img src={session?.user?.image} alt="" />
+                  <img
+                    src={session?.user?.image}
+                    alt=""
+                    className=" rounded-full"
+                  />
                   <span>{session?.user?.name}</span>
                   <RiArrowDropDownFill />
                 </div>

@@ -7,6 +7,7 @@ handler.get(async (req, res) => {
   try {
     db.connectDb();
     const id = req.query.id;
+    console.log({ id });
     const style = req.query.style || 0;
     const size = req.query.size || 0;
     const product = await Product.findById(id).lean();
