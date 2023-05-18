@@ -64,7 +64,8 @@ export default function Signin({ providers, callbackUrl, csrfToken }) {
       .required(
         "You'll need this when you log in and if you ever need to reset your password."
       )
-      .email("Enter a valid email address."),
+      .email("Enter a valid email address.")
+      .lowercase(),
     password: Yup.string()
       .required(
         "Enter a combination of at least six numbers,letters and punctuation marks(such as ! and &)."
@@ -80,7 +81,7 @@ export default function Signin({ providers, callbackUrl, csrfToken }) {
       setLoading(true);
       const { data } = await axios.post("/api/auth/signup", {
         name,
-        email,
+        email: email.toLowerCase(),
         password,
       });
       setUser({ ...user, error: "", success: data.message });
@@ -103,7 +104,7 @@ export default function Signin({ providers, callbackUrl, csrfToken }) {
     setLoading(true);
     let options = {
       redirect: false,
-      email: login_email,
+      email: login_email.toLowerCase(),
       password: login_password,
     };
     const res = await signIn("credentials", options);
