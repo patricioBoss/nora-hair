@@ -18,7 +18,8 @@ export async function middleware(req) {
     if (!session) return NextResponse.redirect(`${origin}`);
   }
   if (pathname.startsWith("/admin")) {
-    if (!session) return NextResponse.redirect(`${origin}`);
-    if (session.role !== "admin") return NextResponse.redirect(`${origin}`);
+    if (!session) return NextResponse.redirect(`/admin/login`);
+    if (session.role?.toLowerCase() !== "admin")
+      return NextResponse.redirect(`${origin}`);
   }
 }

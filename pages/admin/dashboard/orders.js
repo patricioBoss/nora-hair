@@ -5,8 +5,8 @@ import db from "../../../utils/db";
 import Order from "../../../models/Order";
 import User from "../../../models/User";
 import { useState } from "react";
-import { Typography } from "@mui/material";
-export default function Orders({ orders }) {
+import { Pagination, Typography } from "@mui/material";
+export default function Orders({ orders, paginationCount }) {
   const router = useRouter();
   console.log(router.query);
   const [search, setsearch] = useState(router.query?.id ?? "");
@@ -16,10 +16,21 @@ export default function Orders({ orders }) {
   };
   const handleSearch = () => {
     const currentPath = router.pathname;
-    router.push(currentPath, {
+    router.push({
+      pathname: currentPath,
       query: {
         ...router.query,
         id: search,
+      },
+    });
+  };
+  const pageHandler = (e, page) => {
+    const currentPath = router.pathname;
+    router.push({
+      pathname: currentPath,
+      query: {
+        ...router.query,
+        page,
       },
     });
   };
@@ -63,6 +74,13 @@ export default function Orders({ orders }) {
         </div>
 
         <CollapsibleTable rows={orders} />
+        <Pagination
+          count={paginationCount}
+          defaultPage={Number(router.query.page) || 1}
+          onChange={pageHandler}
+          variant="outlined"
+          color="primary"
+        />
       </>
     </Layout>
   );
@@ -73,6 +91,8 @@ Orders.auth = {
 
 export async function getServerSideProps(ctx) {
   const { query } = ctx;
+  const page = query.page || 1;
+  const pageSize = 10;
   const searchId = query?.id?.trim() || "";
   await db.connectDb();
   if (searchId) {
@@ -87,12 +107,16 @@ export async function getServerSideProps(ctx) {
       },
     };
   } else {
+    const totalOrders = await Order.count();
     const orders = await Order.find({})
+      .skip(pageSize * (page - 1))
+      .limit(pageSize)
       .populate({ path: "user", model: User, select: "name email image" })
-      .sort({ createdAt: -1 })
+      .sort({ createdAt: -1, paid: -1 })
       .lean();
     return {
       props: {
+        paginationCount: Math.ceil(totalOrders / pageSize),
         orders: JSON.parse(JSON.stringify(orders)),
       },
     };
