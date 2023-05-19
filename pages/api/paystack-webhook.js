@@ -13,7 +13,7 @@ handler.post(async (req, res) => {
   //     origin: '*',
   //     optionsSuccessStatus: 200, // some legacy browsers (IE11, various SmartTVs) choke on 204
   //  });
-
+  console.log("the web hook api is hit", req.method, req.url);
   const hash = crypto
     .createHmac("sha512", "sk_test_36178364c6cf8f1cf2260282803d9df543995887")
     .update(JSON.stringify(req.body))
