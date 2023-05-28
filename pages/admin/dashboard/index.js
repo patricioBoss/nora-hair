@@ -37,7 +37,6 @@ export default function Dashboard({
           </div>
           <div className={styles.header__right}>
             <Dropdown userImage={session?.user?.image} />
-            <Notifications />
           </div>
         </div>
         <div className={styles.cards}>

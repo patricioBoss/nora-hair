@@ -60,7 +60,7 @@ export default function Orders({ orders, paginationCount }) {
               value={search}
               onChange={textChange}
               className="block w-full focus:outline-0 !border-0 p-0 text-gray-900 placeholder-gray-500 focus:ring-0 sm:text-sm"
-              placeholder="Jane Smith"
+              placeholder="Enter Order Id"
             />
           </div>
           <button

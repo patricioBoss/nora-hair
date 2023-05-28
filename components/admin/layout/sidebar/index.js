@@ -163,7 +163,7 @@ export default function Sidebar() {
           </ul>
         </div>
         <nav>
-          <ul
+          {/* <ul
             className={`${styles.sidebar__list} ${
               expand ? styles.nav_flex : ""
             }`}
@@ -196,7 +196,7 @@ export default function Sidebar() {
                 </a>
               </Link>
             </li>
-          </ul>
+          </ul> */}
         </nav>
       </div>
     </div>

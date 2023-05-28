@@ -56,11 +56,11 @@ export default function Dropdown({ userImage }) {
               <ImUsers />
             </Link>
           </div>
-          <div className={styles.dropdown__content_icons_icon}>
+          {/* <div className={styles.dropdown__content_icons_icon}>
             <Link href="/admin/dashboard/messages">
               <AiFillMessage />
             </Link>
-          </div>
+          </div> */}
           <div className={styles.dropdown__content_icons_icon}>
             <Link href="/admin/dashboard/product/all">
               <FaThList />
@@ -90,28 +90,7 @@ export default function Dropdown({ userImage }) {
             </Link>
           </div>
         </div>
-        <div className={styles.dropdown__content_items}>
-          <div className={styles.dropdown__content_items_item}>
-            <Link href="/">
-              <VscHome />
-            </Link>
-          </div>
-          <div className={styles.dropdown__content_items_item}>
-            <Link href="/">
-              <FaRegUserCircle />
-            </Link>
-          </div>
-          <div className={styles.dropdown__content_items_item}>
-            <Link href="/">
-              <IoNotificationsSharp />
-            </Link>
-          </div>
-          <div className={styles.dropdown__content_items_item}>
-            <Link href="/">
-              <RiSettingsLine />
-            </Link>
-          </div>
-        </div>
+
         <div className={styles.dropdown__logout}>
           <button onClick={() => signOut()}>Logout</button>
         </div>
