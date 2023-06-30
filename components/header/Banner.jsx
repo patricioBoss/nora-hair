@@ -1,4 +1,4 @@
-import { XMarkIcon } from '@heroicons/react/20/solid'
+import { XMarkIcon } from "@heroicons/react/20/solid";
 import Marquee from "react-fast-marquee";
 
 export default function Banner() {
@@ -7,18 +7,25 @@ export default function Banner() {
       <div className="flex flex-wrap items-center gap-x-4 gap-y-2">
         <Marquee className="text-sm leading-6 text-white">
           <strong className="font-semibold">Freebies</strong>
-          <svg viewBox="0 0 2 2" className="mx-2 inline h-0.5 w-0.5 fill-current" aria-hidden="true">
+          <svg
+            viewBox="0 0 2 2"
+            className="mx-2 inline h-0.5 w-0.5 fill-current"
+            aria-hidden="true"
+          >
             <circle cx={1} cy={1} r={1} />
           </svg>
-          Get free delivery on orders over N40,000
+          Get free delivery on orders over N400,000
         </Marquee>
       </div>
       <div className="flex flex-1 justify-end">
-        <button type="button" className="-m-3 p-3 focus-visible:outline-offset-[-4px]">
+        <button
+          type="button"
+          className="-m-3 p-3 focus-visible:outline-offset-[-4px]"
+        >
           <span className="sr-only">Dismiss</span>
-          <XMarkIcon className="h-5 w-5 text-gray-100"/>
+          <XMarkIcon className="h-5 w-5 text-gray-100" />
         </button>
       </div>
     </div>
-  )
+  );
 }

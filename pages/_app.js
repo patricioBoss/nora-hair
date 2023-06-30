@@ -1,5 +1,6 @@
 import "../styles/globals.scss";
 import { Provider } from "react-redux";
+import Router from "next/router";
 import store from "../store";
 import { PersistGate } from "redux-persist/integration/react";
 import { persistStore } from "redux-persist";
@@ -7,11 +8,20 @@ import Head from "next/head";
 import { SessionProvider } from "next-auth/react";
 import { PayPalScriptProvider } from "@paypal/react-paypal-js";
 import { ToastContainer } from "react-toastify";
+import LoadingBar from "react-top-loading-bar";
 import "react-toastify/dist/ReactToastify.css";
 import WatsappFAB from "../components/WatsappFAB";
 import Auth from "../components/auth";
+import { useEffect, useState } from "react";
 let persistor = persistStore(store);
 function MyApp({ Component, pageProps: { session, ...pageProps } }) {
+  // Setup Page Loader
+  const [progress, setProgress] = useState(0);
+  useEffect(() => {
+    Router.events.on("routeChangeStart", () => setProgress(40));
+    Router.events.on("routeChangeComplete", () => setProgress(100));
+    Router.events.on("routeChangeError", () => setProgress(0));
+  }, []);
   return (
     <>
       <Head>
@@ -42,18 +52,23 @@ function MyApp({ Component, pageProps: { session, ...pageProps } }) {
                 pauseOnHover
                 theme="colored"
               />
-              <WatsappFAB/>
-     {Component.auth ? (
-      <Auth role={Component.auth.role}>
-        <Component {...pageProps} />
-      </Auth>
-    ) : (
-      <Component {...pageProps} />
-    )}
+              <WatsappFAB />
+              {Component.auth ? (
+                <Auth role={Component.auth.role}>
+                  <Component {...pageProps} />
+                </Auth>
+              ) : (
+                <Component {...pageProps} />
+              )}
             </PayPalScriptProvider>
           </PersistGate>
         </Provider>
       </SessionProvider>
+      <LoadingBar
+        color="#c8c7c7"
+        progress={progress}
+        onLoaderFinished={() => setProgress(0)}
+      />
     </>
   );
 }

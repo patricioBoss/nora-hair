@@ -1,5 +1,5 @@
 import styles from "./styles.module.scss";
-import { useState } from "react";
+import { useRef, useState } from "react";
 import { Form, Formik } from "formik";
 import * as Yup from "yup";
 import "yup-phone";
@@ -18,6 +18,8 @@ import { FaMapMarkerAlt } from "react-icons/fa";
 import { IoMdArrowDropupCircle } from "react-icons/io";
 import { AiOutlinePlus } from "react-icons/ai";
 import { IoIosRemoveCircleOutline } from "react-icons/io";
+import Spin from "../../spin";
+import { useEffect } from "react";
 const initialValues = {
   firstName: "",
   lastName: "",
@@ -30,8 +32,23 @@ const initialValues = {
   country: "",
 };
 export default function Shipping({ user, addresses, setAddresses, profile }) {
+  console.log({ addresses });
+  const mounted = useRef(true);
   const [shipping, setShipping] = useState(initialValues);
+  const [loading, setLoading] = useState(false);
   const [visible, setVisible] = useState(user?.address.length ? false : true);
+
+  useEffect(() => {
+    if (mounted.current && addresses.length) {
+      if (!addresses.some((address) => address.active)) {
+        changeActiveAddress(addresses[addresses.length - 1]._id).then((res) => {
+          setAddresses(res.addresses);
+        });
+      }
+    }
+    mounted.current = false;
+  }, []);
+
   const {
     firstName,
     lastName,
@@ -83,10 +100,20 @@ export default function Shipping({ user, addresses, setAddresses, profile }) {
     setShipping({ ...shipping, [name]: value });
   };
   const saveShippingHandler = async () => {
-    const res = await saveAddress(shipping);
-    if (res?.addresses) setVisible(false);
-    console.log({ res });
-    setAddresses(res.addresses);
+    setLoading(true);
+    try {
+      const res = await saveAddress(shipping);
+      if (res?.addresses) {
+        const newRes = await changeActiveAddress(
+          res?.addresses[res.addresses.length - 1]._id
+        );
+        setVisible(false);
+        console.log({ newRes });
+        setAddresses(newRes.addresses);
+      }
+    } finally {
+      setLoading(false);
+    }
   };
   const changeActiveHandler = async (id) => {
     const res = await changeActiveAddress(id);
@@ -239,7 +266,9 @@ export default function Shipping({ user, addresses, setAddresses, profile }) {
                 placeholder="Address 2"
                 onChange={handleChange}
               />
-              <button type="submit">Save Address</button>
+              <button className={loading && " !opacity-70"} type="submit">
+                Save Address {loading && <Spin width={"w-4"} height={"w-4"} />}
+              </button>
             </Form>
           )}
         </Formik>

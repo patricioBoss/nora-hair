@@ -92,7 +92,7 @@ Orders.auth = {
 export async function getServerSideProps(ctx) {
   const { query } = ctx;
   const page = query.page || 1;
-  const pageSize = 10;
+  const pageSize = 15;
   const searchId = query?.id?.trim() || "";
   await db.connectDb();
   if (searchId) {
