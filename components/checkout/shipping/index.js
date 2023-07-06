@@ -266,7 +266,7 @@ export default function Shipping({ user, addresses, setAddresses, profile }) {
                 placeholder="Address 2"
                 onChange={handleChange}
               />
-              <button className={loading && " !opacity-70"} type="submit">
+              <button className={loading && " !opacity-70 flex"} type="submit">
                 Save Address {loading && <Spin width={"w-4"} height={"w-4"} />}
               </button>
             </Form>

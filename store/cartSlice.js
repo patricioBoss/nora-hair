@@ -8,12 +8,15 @@ export const cartSlice = createSlice({
   initialState,
   reducers: {
     toggleSlider(state) {
+      console.log("toggleSlider is toggled");
       state.cartSlide = !state.cartSlide;
     },
     closeSlider(state) {
+      console.log("closeSlider is clicked");
       state.cartSlide = false;
     },
     addToCart(state, action) {
+      console.log("addToCart is clicked");
       state.cartItems.push(action.payload);
     },
     updateCart(state, action) {

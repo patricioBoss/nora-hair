@@ -2,14 +2,21 @@ import { Fragment, useState } from "react";
 import { Dialog, Transition } from "@headlessui/react";
 import { XMarkIcon } from "@heroicons/react/24/outline";
 import { useDispatch, useSelector } from "react-redux";
+import Router from "next/router";
 import { closeSlider, toggleSlider, updateCart } from "../store/cartSlice";
 import Link from "next/link";
 import { fCurrency } from "../utils/formatNumber";
+import { useEffect } from "react";
 
 export default function SlideCart() {
   const open = useSelector((state) => state.cart.cartSlide);
   const cartItems = useSelector((state) => state.cart.cartItems);
   const dispatch = useDispatch();
+  useEffect(() => {
+    Router.events.on("routeChangeStart", () => {
+      dispatch(closeSlider());
+    });
+  }, []);
   const removeProduct = (id) => {
     let newCart = cartItems.filter((p) => {
       return p._uid != id;
@@ -59,7 +66,7 @@ export default function SlideCart() {
                           <button
                             type="button"
                             className="-m-2 p-2 text-gray-400 hover:text-gray-500"
-                            onClick={() => dispatch(toggleSlider())}
+                            onClick={() => dispatch(closeSlider())}
                           >
                             <span className="sr-only">Close panel</span>
                             <XMarkIcon className="h-6 w-6" aria-hidden="true" />
@@ -163,7 +170,10 @@ export default function SlideCart() {
                         Shipping and taxes calculated at checkout.
                       </p>
                       <div className="mt-6">
-                        <Link href="/cart">
+                        <Link
+                          href="/cart"
+                          onClick={() => dispatch(closeSlider())}
+                        >
                           <button className="flex items-center justify-center rounded-md border border-transparent bg-indigo-600 px-6 py-3 text-base font-medium text-white shadow-sm hover:bg-indigo-700 w-full">
                             Go to Cart
                           </button>
